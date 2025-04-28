@@ -1,0 +1,26 @@
+{
+    "appName": "Generic Name Generator",
+    "generationSettings": [
+      {
+        "displayName": "Always show prefix",
+        "value": true
+      },
+      {
+        "displayName": "Always show suffix",
+        "value": true
+      }
+    ],
+    "generatorTemplatesPath": "assets/names/templates.txt",
+    "wordLists": [
+    {
+      "displayName": "First Name",
+      "key": "firstName",
+      "path": "assets/names/wordlist_first_names.txt"
+    },
+    {
+      "displayName": "Last Name",
+      "key": "lastName",
+      "path": "assets/names/wordlist_last_names.txt"
+    }
+  ]
+  }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/appstate.dart';
 import '../functions/functions.dart' as func;
 
-/// Settings page with tabs for generation templates and word overrides.
+/// Main settings page with tabs for name templates and dynamic word overrides.
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -42,7 +42,10 @@ class _SettingsPageState extends State<SettingsPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: const [_TemplateSettingsTab(), _OverrideSettingsTab()],
+              children: const [
+                TemplateSettingsTab(),
+                OverrideSettingsTab(),
+              ],
             ),
           ),
         ],
@@ -51,50 +54,54 @@ class _SettingsPageState extends State<SettingsPage>
   }
 }
 
-/// Tab for toggling name generation templates, including prefix.
-/// Generates each template example once and caches subtitles.
-class _TemplateSettingsTab extends StatefulWidget {
-  const _TemplateSettingsTab({super.key});
+/// Tab for toggling name generation templates.
+class TemplateSettingsTab extends StatefulWidget {
+  const TemplateSettingsTab({super.key});
 
   @override
-  State<_TemplateSettingsTab> createState() => _TemplateSettingsTabState();
+  State<TemplateSettingsTab> createState() => _TemplateSettingsTabState();
 }
 
-class _TemplateSettingsTabState extends State<_TemplateSettingsTab> {
+class _TemplateSettingsTabState extends State<TemplateSettingsTab> {
   late final List<String> _cachedExamples;
 
   @override
   void initState() {
     super.initState();
-    // Generate and cache one example per template
-    _cachedExamples =
-        NameGenerationData().templates
-            .map((t) => func.generateNameFromTemplate(t.pattern))
-            .toList();
+    _cachedExamples = NameGenerationData().templates
+        .map((t) => func.generateNameFromTemplate(t.pattern))
+        .toList();
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
+    final templates = NameGenerationData().templates;
+
+    // Create toggle widgets from generationSettings
+    final generationToggles = NameGenerationData().generationSettings.map((entry) {
+      return SwitchListTile(
+        title: Text(entry['displayName'] as String),
+        value: entry['value'] as bool,
+        onChanged: (enabled) {
+          setState(() {
+            entry['value'] = enabled;  // Update the value in the list
+          });
+        },
+      );
+    }).toList();
+
     return ListView(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       children: [
-        // example bool toggle
-        // SwitchListTile(
-        //   title: const Text('Enable Prefix'),
-        //   subtitle: const Text('Add a prefix to the name'),
-        //   value: AppState().prefix,
-        //   onChanged: (enabled) {
-        //     AppState().prefix = enabled;
-        //     setState(() {});
-        //   },
-        // ),
         const Divider(),
-        // Dynamic template toggles with cached subtitles
-        ...List.generate(NameGenerationData().templates.length, (index) {
-          final template = NameGenerationData().templates[index];
+        // Insert generation settings toggles at the top
+        ...generationToggles,
+        // Then the regular template toggles
+        ...List.generate(templates.length, (index) {
+          final template = templates[index];
           return SwitchListTile(
             title: Text(template.pattern),
-            subtitle: Text('e.g. \"${_cachedExamples[index]}\"'),
+            subtitle: Text('e.g. "${_cachedExamples[index]}"'),
             value: NameGenerationData().isTemplateEnabled(index),
             onChanged: (enabled) {
               NameGenerationData().toggleTemplate(index, enabled);
@@ -107,54 +114,70 @@ class _TemplateSettingsTabState extends State<_TemplateSettingsTab> {
   }
 }
 
-/// Tab for setting manual word overrides.
-class _OverrideSettingsTab extends StatelessWidget {
-  const _OverrideSettingsTab({super.key});
+/// Tab for setting manual word overrides dynamically from config.
+class OverrideSettingsTab extends StatefulWidget {
+  const OverrideSettingsTab({super.key});
+
+  @override
+  State<OverrideSettingsTab> createState() => _OverrideSettingsTabState();
+}
+
+class _OverrideSettingsTabState extends State<OverrideSettingsTab> {
+  late final List<Map<String, dynamic>> _overrideFields;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load override field definitions from config
+    final lists = Config().get('wordLists') as List<dynamic>;
+    _overrideFields = lists
+        .map((e) => e as Map<String, dynamic>)
+        .where((entry) => entry.containsKey('displayName'))
+        .toList();
+
+    // Add manual overrides for Prefix and Suffix
+    _overrideFields.insert(0, {
+      'key': 'prefixOverride', 
+      'displayName': 'Prefix', 
+    });
+
+    _overrideFields.add({
+      'key': 'suffixOverride', 
+      'displayName': 'Suffix', 
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(8),
-      children: const [
-        SizedBox(height: 16),
-        _OverrideField(
-          label: 'First Name Override',
-          helper: 'Overrides the first name in the generated name',
-          valueKey: _OverrideKey.firstName,
-        ),
-        SizedBox(height: 16),
-                _OverrideField(
-          label: 'Last Name Override',
-          helper: 'Overrides the last name in the generated name',
-          valueKey: _OverrideKey.lastName,
-        ),
-        SizedBox(height: 16),
-        _OverrideField(
-          label: 'Prefix',
-          helper: 'Adds a prefix to the generated name',
-          valueKey: _OverrideKey.prefix,
-        ),
-        SizedBox(height: 16),
-      ],
+      padding: const EdgeInsets.all(8.0),
+      children: _overrideFields.map((field) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: _OverrideField(
+            valueKey: field['key'] as String,
+            label: '${field['displayName'] as String} Override',
+            helper: "Overrides the ${field['displayName'] as String} in the generated name",
+          ),
+        );
+      }).toList(),
     );
   }
 }
 
-/// Keys for identifying the override fields.
-enum _OverrideKey { firstName, lastName, prefix }
 
-/// Single text field for setting an override.
+/// Single text field for setting an override, keyed dynamically.
 class _OverrideField extends StatefulWidget {
   final String label;
   final String helper;
-  final _OverrideKey valueKey;
+  final String valueKey;
 
   const _OverrideField({
     required this.label,
     required this.helper,
     required this.valueKey,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_OverrideField> createState() => _OverrideFieldState();
@@ -166,11 +189,8 @@ class _OverrideFieldState extends State<_OverrideField> {
   @override
   void initState() {
     super.initState();
-    final initial = switch (widget.valueKey) {
-      _OverrideKey.firstName => AppState().firstNameOverride,
-      _OverrideKey.lastName => AppState().lastNameOverride,
-      _OverrideKey.prefix => AppState().prefixOverride,
-    };
+    // Use a dynamic map in AppState for overrides
+    final initial = AppState().overrides[widget.valueKey] ?? '';
     _controller = TextEditingController(text: initial);
   }
 
@@ -181,18 +201,7 @@ class _OverrideFieldState extends State<_OverrideField> {
   }
 
   void _onChanged(String value) {
-    final trimmed = value.trim();
-    switch (widget.valueKey) {
-      case _OverrideKey.firstName:
-        AppState().firstNameOverride = trimmed;
-        break;
-      case _OverrideKey.lastName:
-        AppState().lastNameOverride = trimmed;
-        break;
-      case _OverrideKey.prefix:
-        AppState().prefixOverride = trimmed;
-        break;
-    }
+    AppState().overrides[widget.valueKey] = value.trim();
   }
 
   @override

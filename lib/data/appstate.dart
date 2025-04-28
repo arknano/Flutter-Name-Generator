@@ -1,4 +1,5 @@
 export 'name_generation_data.dart';
+export 'config.dart';
 
 class AppState {
   // Private constructor
@@ -17,8 +18,7 @@ class AppState {
   List<String> generatedNames = [];
   List<String> savedNames = [];
 
-  String firstNameOverride = '';
-  String lastNameOverride = '';
+  Map<String, String> overrides = {};
   String prefixOverride = '';
   bool lightMode = true;
 }
