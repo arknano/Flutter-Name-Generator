@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_clipboard/super_clipboard.dart';
 
+
 // Copies the provided name to the system clipboard and shows a snackbar message
 void copyToClipboard(
   BuildContext context,
@@ -23,3 +24,4 @@ void _copyToSystemClipboard(String name) {
   item.add(Formats.plainText(name));
   clipboard?.write([item]);
 }
+

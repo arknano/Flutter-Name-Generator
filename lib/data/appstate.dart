@@ -1,4 +1,5 @@
 export 'name_generation_data.dart';
+export 'config.dart';
 
 class AppState {
   // Private constructor

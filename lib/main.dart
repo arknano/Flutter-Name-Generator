@@ -21,10 +21,10 @@ class _GeneratorAppState extends State<GeneratorApp> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Title(
-      title: 'Generic Name Generator',
+      title: Config().get('appName'),
       color: theme.colorScheme.primary,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Generic Name Generator'), ),
+        appBar: AppBar(title: Text(Config().get('appName')), ),
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {
             setState(() {
@@ -65,6 +65,7 @@ class _GeneratorAppState extends State<GeneratorApp> {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Config().initialiseConfig();
   runApp(MainApp());
 }
 
@@ -80,7 +81,6 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     func.loadSavedNames();
-    NameGenerationData().initialiseWords();
   }
 
   @override

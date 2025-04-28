@@ -30,7 +30,7 @@ import 'dart:math';
       if (overrides.containsKey(key)) {
         return overrides[key]!;
       }
-      final bank = NameGenerationData().wordBanks[key];
+      final bank = Config().wordLists[key];
       if (bank == null || bank.isEmpty) {
         throw StateError('No words for placeholder: $key');
       }

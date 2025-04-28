@@ -1,0 +1,18 @@
+{
+    "appName": "Generic Name Generator",
+    "exampleBools": {
+      "bool1": true,
+      "bool2": false
+    },
+    "generatorTemplatesPath": "assets/names/templates.txt",
+    "wordLists": [
+    {
+      "name": "firstName",
+      "path": "assets/names/wordlist_first_names.txt"
+    },
+    {
+      "name": "lastName",
+      "path": "assets/names/wordlist_last_names.txt"
+    }
+  ]
+  }
