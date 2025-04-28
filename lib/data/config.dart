@@ -48,7 +48,7 @@ class Config {
 
     for (final dynamic listEntry in lists) {
       if (listEntry is Map<String, dynamic>) {
-        final String name = listEntry['name'];
+        final String name = listEntry['key'];
         final String path = listEntry['path'];
         wordLists[name] = await _parseWordListFile(path);
       }

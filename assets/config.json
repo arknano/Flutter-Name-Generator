@@ -7,11 +7,13 @@
     "generatorTemplatesPath": "assets/names/templates.txt",
     "wordLists": [
     {
-      "name": "firstName",
+      "displayName": "First Name",
+      "key": "firstName",
       "path": "assets/names/wordlist_first_names.txt"
     },
     {
-      "name": "lastName",
+      "displayName": "Last Name",
+      "key": "lastName",
       "path": "assets/names/wordlist_last_names.txt"
     }
   ]

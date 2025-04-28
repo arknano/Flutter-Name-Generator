@@ -18,8 +18,7 @@ class AppState {
   List<String> generatedNames = [];
   List<String> savedNames = [];
 
-  String firstNameOverride = '';
-  String lastNameOverride = '';
+  Map<String, String> overrides = {};
   String prefixOverride = '';
   bool lightMode = true;
 }
