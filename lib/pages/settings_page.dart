@@ -176,8 +176,7 @@ class _OverrideField extends StatefulWidget {
     required this.label,
     required this.helper,
     required this.valueKey,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   State<_OverrideField> createState() => _OverrideFieldState();

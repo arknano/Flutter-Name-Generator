@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart' show rootBundle;
-
 class NameTemplate {
   final String pattern;
   bool enabled;

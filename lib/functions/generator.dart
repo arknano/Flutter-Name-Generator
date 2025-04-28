@@ -57,7 +57,7 @@ String _applyPattern(String pattern, Map<String, String> overrides) {
 }
 
 /// Capitalizes the first letter of the given string.
-String _capitalize(String input) {
-  if (input.isEmpty) return input;
-  return input[0].toUpperCase() + input.substring(1);
-}
+// String _capitalize(String input) {
+//   if (input.isEmpty) return input;
+//   return input[0].toUpperCase() + input.substring(1);
+// }

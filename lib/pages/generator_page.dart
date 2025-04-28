@@ -57,7 +57,7 @@ class _GeneratorPageState extends State<GeneratorPage> {
 
 /// Displays the currently generated name.
 class _CurrentNameDisplay extends StatelessWidget {
-  const _CurrentNameDisplay({super.key});
+  const _CurrentNameDisplay();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class _CurrentNameDisplay extends StatelessWidget {
 /// Button to generate a new name.
 class _GenerateButton extends StatelessWidget {
   final VoidCallback onGenerate;
-  const _GenerateButton({required this.onGenerate, super.key});
+  const _GenerateButton({required this.onGenerate});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class _GenerateButton extends StatelessWidget {
 /// List of generated names with automatic scroll and history display.
 class _GeneratedNamesList extends StatelessWidget {
   final ScrollController controller;
-  const _GeneratedNamesList({required this.controller, super.key});
+  const _GeneratedNamesList({required this.controller});
 
   @override
   Widget build(BuildContext context) {

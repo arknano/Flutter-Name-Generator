@@ -42,7 +42,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 /// Button to clear all saved favorites.
 class _ClearFavoritesButton extends StatelessWidget {
   final VoidCallback onCleared;
-  const _ClearFavoritesButton({required this.onCleared, super.key});
+  const _ClearFavoritesButton({required this.onCleared});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _ClearFavoritesButton extends StatelessWidget {
 /// List widget showing saved favorites or an empty state.
 class _FavoritesList extends StatelessWidget {
   final VoidCallback onUnfavourited;
-  const _FavoritesList({required this.onUnfavourited, super.key});
+  const _FavoritesList({required this.onUnfavourited});
 
   @override
   Widget build(BuildContext context) {
