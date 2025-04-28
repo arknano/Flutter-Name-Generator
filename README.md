@@ -1,3 +1,3 @@
-# ffnamegen
+# Flutter Name Generator
 
-A new Flutter project.
+A configurable name generator app built in, well, Flutter.
