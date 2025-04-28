@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- <base href="/gen/namegenerator"> -->
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Generic Name Generator">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Optimized Flutter Web">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Generic Name Generator</title>
+  <link rel="manifest" href="manifest.json">
+  <script src="flutter.js" defer></script>
+</head>
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      _flutter.loader.loadEntrypoint({
+        onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = await engineInitializer.initializeEngine();
+          let container = document.getElementById('loading');
+          container.style.transition = 'opacity 0.5s ease-out';
+          container.style.opacity = '0';
+          setTimeout(() => {
+            container.style.display = 'none';
+          }, 500);
+          await appRunner.runApp();
+        }
+      });
+    });
+  </script>
+
+  <style>
+    body {
+      background-color: #FEF7FF;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #loading {
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #CAC4D0;
+      border-top: 5px solid #6750A4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</body>
+</html> 
