@@ -1,9 +1,15 @@
 {
     "appName": "Generic Name Generator",
-    "exampleBools": {
-      "bool1": true,
-      "bool2": false
-    },
+    "generationSettings": [
+      {
+        "displayName": "Always show prefix",
+        "value": true
+      },
+      {
+        "displayName": "Always show suffix",
+        "value": true
+      }
+    ],
     "generatorTemplatesPath": "assets/names/templates.txt",
     "wordLists": [
     {

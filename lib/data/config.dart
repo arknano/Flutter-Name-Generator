@@ -23,6 +23,7 @@ class Config {
   /// Loads all word lists from assets into the word banks.
   Future<void> initialiseConfig() async {
     await _loadConfigJson();
+    await _loadGenerationBools();
     await _loadWordLists();
     await _loadTemplates();
   }
@@ -36,6 +37,16 @@ class Config {
 
   dynamic get(String key) {
     return config[key];
+  }
+
+  Future<void> _loadGenerationBools() async {
+    NameGenerationData().generationSettings = (config['generationSettings'] as List<dynamic>)
+          .map((e) => {
+            'displayName': e['displayName'],
+            'value': e['value']
+          })
+          .toList();
+    
   }
 
 ////////// WORD LISTS //////////

@@ -22,7 +22,23 @@ String generateNameFromTemplate(String pattern) {
     AppState().overrides.entries.where((entry) => entry.value.isNotEmpty),
   );
 
-  return '${AppState().prefixOverride} ${_applyPattern(pattern, overrides)}';
+  return '${_getAffix(true)}${_applyPattern(pattern, overrides)}${_getAffix(false)}';
+}
+
+String _getAffix(bool prefix) {
+  String affix =
+      prefix
+          ? AppState().overrides['prefixOverride'] ?? ''
+          : AppState().overrides['suffixOverride'] ?? '';
+  if (!NameGenerationData().getGenerationSetting(
+    prefix ? 'Always show prefix' : 'Always show suffix',
+  )) {
+    affix = Random().nextBool() ? affix : '';
+  }
+  if (affix.isNotEmpty) {
+    affix = prefix ? '$affix ' : ' $affix';
+  }
+  return affix;
 }
 
 /// Applies the given pattern with the provided overrides.

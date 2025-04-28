@@ -21,7 +21,15 @@ class NameGenerationData {
 
 
   final List<NameTemplate> templates = [];
+  List<Map<String, dynamic>> generationSettings = [];
 
+  bool getGenerationSetting(String key) {
+    final setting = generationSettings.firstWhere(
+      (setting) => setting['displayName'] == key,
+      orElse: () => {'value': false},
+    );
+    return setting['value'] as bool;
+  }
 
   /// Toggles the enabled state of a template at the given index.
   void toggleTemplate(int index, bool isEnabled) {

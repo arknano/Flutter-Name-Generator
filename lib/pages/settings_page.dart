@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../data/appstate.dart';
-import '../data/name_generation_data.dart';
 import '../functions/functions.dart' as func;
 
 /// Main settings page with tabs for name templates and dynamic word overrides.
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -57,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage>
 
 /// Tab for toggling name generation templates.
 class TemplateSettingsTab extends StatefulWidget {
-  const TemplateSettingsTab({Key? key}) : super(key: key);
+  const TemplateSettingsTab({super.key});
 
   @override
   State<TemplateSettingsTab> createState() => _TemplateSettingsTabState();
@@ -74,13 +73,30 @@ class _TemplateSettingsTabState extends State<TemplateSettingsTab> {
         .toList();
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     final templates = NameGenerationData().templates;
+
+    // Create toggle widgets from generationSettings
+    final generationToggles = NameGenerationData().generationSettings.map((entry) {
+      return SwitchListTile(
+        title: Text(entry['displayName'] as String),
+        value: entry['value'] as bool,
+        onChanged: (enabled) {
+          setState(() {
+            entry['value'] = enabled;  // Update the value in the list
+          });
+        },
+      );
+    }).toList();
+
     return ListView(
       padding: const EdgeInsets.all(8.0),
       children: [
         const Divider(),
+        // Insert generation settings toggles at the top
+        ...generationToggles,
+        // Then the regular template toggles
         ...List.generate(templates.length, (index) {
           final template = templates[index];
           return SwitchListTile(
@@ -113,12 +129,22 @@ class _OverrideSettingsTabState extends State<OverrideSettingsTab> {
   void initState() {
     super.initState();
     // Load override field definitions from config
-    // ngl I don't really know what's happening here.
     final lists = Config().get('wordLists') as List<dynamic>;
     _overrideFields = lists
         .map((e) => e as Map<String, dynamic>)
         .where((entry) => entry.containsKey('displayName'))
         .toList();
+
+    // Add manual overrides for Prefix and Suffix
+    _overrideFields.insert(0, {
+      'key': 'prefixOverride', 
+      'displayName': 'Prefix', 
+    });
+
+    _overrideFields.add({
+      'key': 'suffixOverride', 
+      'displayName': 'Suffix', 
+    });
   }
 
   @override
@@ -138,6 +164,7 @@ class _OverrideSettingsTabState extends State<OverrideSettingsTab> {
     );
   }
 }
+
 
 /// Single text field for setting an override, keyed dynamically.
 class _OverrideField extends StatefulWidget {
